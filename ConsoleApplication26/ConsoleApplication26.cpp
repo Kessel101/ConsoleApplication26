@@ -2,6 +2,8 @@
 #include <math.h>
 #include <vector>
 #include <string>
+#include <ctime> 
+
 #define f 5
 using namespace std;
 
@@ -10,7 +12,7 @@ struct point {
     int x, y;
     vector <point> connections;
     bool operator == (const point& p) {
-        if ( p.x == x and p.y == y)
+        if (p.x == x and p.y == y)
             return true;
         else
             return false;
@@ -21,14 +23,14 @@ double distance(point p1, point p2) {
     return sqrt(pow((p1.x - p2.x), 2) + pow((p1.y - p2.y), 2));
 }
 
-void findConnections(point *p, vector<point> tab){
+void findConnections(point* p, vector<point> tab) {
     vector<point>::iterator ptr;
     for (ptr = tab.begin(); ptr < tab.end(); ptr++) {
         if (distance(*p, *ptr) <= f and p->name != ptr->name) {
             p->connections.push_back(*ptr);
             /*ptr->connections.push_back(*p);*/
         }
-        
+
     }
 }
 
@@ -45,14 +47,16 @@ point generatePoint(int start = 65, vector <point> used = {}, int radius = 0, po
         res.x = rand() % (xmax - xmin) + xmin;
         res.y = rand() % (ymax - ymin) + ymin;
     }
+
     else
     {
+
         bool con = true;
         while (con) {
             con = false;
             res.x = rand() % (2 * radius + 1) + p.x - radius;
             res.y = rand() % (2 * radius + 1) + p.y - radius;
-            while(distance(p, res) > f)
+            while (distance(p, res) > f)
                 res.y = rand() % (2 * radius + 1) + p.y - radius;
             if (res.x < xmin or res.x > xmax or res.y < ymin or res.y > ymax)
                 con = false;
@@ -112,6 +116,7 @@ vector <point> vecOfPoints(int quantity = 20, int xmin = -100, int xmax = 100, i
 struct dpoint {
     point p;
     double dlugosc;
+    char prev;
 };
 
 
@@ -129,24 +134,41 @@ dpoint* finddPoint(char name, vector<dpoint>& board) {
             return &(*it);
         }
     }
-    return nullptr; 
+    return nullptr;
 }
 
-void printdji(vector <dpoint> tab) {
+void printdji(vector<dpoint> tab) {
     for (auto i = tab.begin(); i < tab.end(); i++) {
         printPoint(i->p);
         cout << "Odleglosc od punktu startowego: " << i->dlugosc << endl;
+        // Wydrukuj œcie¿kê
+        cout << "Sciezka: ";
+        char prev = i->prev;
+        vector<char> path;
+        while (prev != '\0') {
+            path.push_back(prev);
+            for (auto j = tab.begin(); j < tab.end(); j++) {
+                if (j->p.name == prev) {
+                    prev = j->prev;
+                    break;
+                }
+            }
+        }
+        for (auto it = path.rbegin(); it != path.rend(); ++it) {
+            cout << *it << " ";
+        }
+        cout << i->p.name << endl;
     }
 }
 
 void djikstra(vector <point> points = {}, vector <dpoint>* path = {}) {
     for (auto i = points.begin(); i < points.end(); i++) {
         if (i == points.begin()) {
-            path->push_back({ *i, 0 });
+            path->push_back({ *i, 0 ,'\0' });
         }
         else
         {
-            path->push_back({ *i, INT_MAX });
+            path->push_back({ *i, INT_MAX,'\0' });
         }
     }
 
@@ -156,6 +178,7 @@ void djikstra(vector <point> points = {}, vector <dpoint>* path = {}) {
             dpoint* d = finddPoint(j->name, *path);
             if (i->dlugosc + distance(*j, i->p) < d->dlugosc) {
                 d->dlugosc = i->dlugosc + distance(*j, i->p);
+                d->prev = i->p.name;
 
             }
         }
@@ -164,9 +187,9 @@ void djikstra(vector <point> points = {}, vector <dpoint>* path = {}) {
 
 int main()
 {
-    
+    srand(time(0)); // Inicjalizacja ziarna generatora liczb losowych
     int n;
-    cout << "Podaj ilosc punktow(zaleca sie < 26)" << endl;
+    //cout << "Podaj ilosc punktow(zaleca sie < 26)" << endl;
     cin >> n;
     if (n > 52) {
         cout << "za duzo!" << endl;
