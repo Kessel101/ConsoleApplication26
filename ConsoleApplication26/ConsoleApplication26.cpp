@@ -19,6 +19,15 @@ struct point {
     }
 };
 
+bool PointInVec(point p, vector <point> vec) {
+    for (auto t = vec.begin(); t < vec.end(); t++) {
+        if (*t == p) {
+            return true;
+        }
+    }
+    return false;
+}
+
 double distance(point p1, point p2) {
     return sqrt(pow((p1.x - p2.x), 2) + pow((p1.y - p2.y), 2));
 }
@@ -34,7 +43,7 @@ void findConnections(point* p, vector<point> tab) {
     }
 }
 
-point generatePoint(int start = 65, vector <point> used = {}, int radius = 0, point p = {}, int xmin = -100, int xmax = 100, int ymin = -100, int ymax = 100) {
+point generatePoint(int start = 65, vector <point> used = {}, int radius = 0, point p = {}, int dir = 1, int xmin = -100, int xmax = 100, int ymin = -100, int ymax = 100) {
     point res;
     if (start > 90) {
         res.name = char(start + 6);
@@ -50,22 +59,69 @@ point generatePoint(int start = 65, vector <point> used = {}, int radius = 0, po
 
     else
     {
-
-        bool con = true;
+        /*bool con = true;
         while (con) {
+            con = false;
+            int move = rand() % (f)+1;
+            res.x = rand() % (2 * radius + 1) + p.x - radius;
+            int znak = rand() % 2;
+            if (znak == 0) {
+                znak = -1;
+            }
+            else {
+                znak = 1;
+            }
+            res.y = znak * move + p.y;
+            for (auto o = used.begin(); o < used.end(); o++) {
+                if (*o == res) {
+                    con = true;
+                }
+            }
+        }*/
+        bool con = true;
+        int i = 0;
+        while (con) {
+            if (i++ < 7) {
+                con = false;
+                if (dir == 1 or dir == 4) {
+                    res.x = rand() % (radius + 1) + p.x;
+                }
+                else
+                {
+                    res.x = rand() % (radius + 1) + p.x - radius;
+                }
+
+                if (dir < 3) {
+                    for (res.y = p.y; distance(p, res) <= f; res.y++) {}
+                    res.y = rand() % (res.y - p.y) + p.y;
+                }
+                else {
+                    for (res.y = p.y; distance(p, res) <= f; res.y--) {}
+                    res.y = rand() % (res.y - p.y) + p.y;
+                }
+
+                if (PointInVec(res, used))
+                    con = true;
+            }
+            else {
+                return p;
+            }
+        }
+        /*bool con = true;
+        while (con) {
+            int i = 0;
             con = false;
             res.x = rand() % (2 * radius + 1) + p.x - radius;
             res.y = rand() % (2 * radius + 1) + p.y - radius;
             while (distance(p, res) > f)
                 res.y = rand() % (2 * radius + 1) + p.y - radius;
-            if (res.x < xmin or res.x > xmax or res.y < ymin or res.y > ymax)
-                con = false;
-        }
-    }
-    for (auto o = (used).begin(); o < (used).end(); o++) {
-        if (*o == res) {
-            res = generatePoint(start, used, radius, p);
-        }
+            for (auto o = used.begin(); o < used.end(); o++) {
+                if (*o == res) {
+                    con = true;
+                }
+            }
+
+        }*/
     }
     return res;
 }
@@ -77,26 +133,32 @@ void printPoint(point p) {
     cout << endl;
 }
 
-void generateGroup(int start, int number, point p, vector <point>* used, int xmin = -100, int xmax = 100, int ymin = -100, int ymax = 100) {
+void generateGroup(int start, int number, point p, int* dir, vector <point>* used, int xmin = -100, int xmax = 100, int ymin = -100, int ymax = 100) {
     for (int j = 0; j < number; j++) {
         point po;
-        po = generatePoint(start + j, *used, f, p);
+        po = generatePoint(start + j, *used, f, p, *dir);
         /*findConnections(&po, *used);*/
+        if (po == p) {
+            for (auto idx = used->begin(); idx < used->end() and po == p; idx++) {
+                po = generatePoint(start + j, *used, f, *idx, *dir);
+            }
+        }
         used->push_back(po);
     }
 }
 
 vector <point> vecOfPoints(int quantity = 20, int xmin = -100, int xmax = 100, int ymin = -100, int ymax = 100) {
     vector <point> res;
-    int number;
+    int number, dir;
     point previous;
     for (int i = 0; i < quantity; i++) {
         point p;
         if (i == 0) {
-            p = generatePoint(65, res, 0, {}, xmin, xmax, ymin, ymax);
+            dir = rand() % 4 + 1;
+            p = generatePoint(65, res, 0, {}, dir, xmin, xmax, ymin, ymax);
         }
         else {
-            p = generatePoint(i + 65, res, f, previous);
+            p = generatePoint(i + 65, res, f, previous, dir);
         }
         /*findConnections(&p, res);*/
         res.push_back(p);
@@ -104,7 +166,9 @@ vector <point> vecOfPoints(int quantity = 20, int xmin = -100, int xmax = 100, i
         number = rand() % 3 + 1;
         while (i + number >= quantity and number > 0)
             number--;
-        generateGroup(i + 66, number, p, &res);
+
+        generateGroup(i + 66, number, p, &dir, &res);
+        cout << dir << endl;
         i += number;
     }
     for (auto i = res.begin(); i < res.end(); i++) {
