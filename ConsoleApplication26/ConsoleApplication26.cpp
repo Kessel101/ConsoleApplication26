@@ -1,6 +1,6 @@
 #include "Punkty.h"
 
-#define PointsFromFile
+//#define PointsFromFile
 
 #ifndef PointsFromFile
 

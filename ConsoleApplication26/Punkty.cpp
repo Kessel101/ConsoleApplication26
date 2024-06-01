@@ -203,21 +203,44 @@ void printdji(vector<dpoint> tab) {
 }
 
 void djikstra(vector<point> points, vector<dpoint>* path) {
-    for (auto& i : points) {
-        if (&i == &points.front()) {
-            path->push_back({ i, 0, '\0' });
+    if (points.empty()) return;
+
+    // Initialize the path vector
+    for (const auto& pt : points) {
+        if (pt.name == points.front().name) {
+            path->push_back({ pt, 0, {} });
         }
         else {
-            path->push_back({ i, INT_MAX, '\0' });
+            path->push_back({ pt, INT_MAX, {} });
         }
     }
 
-    for (auto& i : *path) {
-        for (auto& j : i.p.connections) {
-            dpoint* d = finddPoint(j.name, *path);
-            if (i.dlugosc + distance(j, i.p) < d->dlugosc) {
-                d->dlugosc = i.dlugosc + distance(j, i.p);
-                d->prev = i.p.name;
+    vector<bool> visited(points.size(), false);
+
+    while (true) {
+        // Find the unvisited node with the smallest distance
+        int minDistance = INT_MAX;
+        dpoint* current = nullptr;
+        for (auto& dp : *path) {
+            if (!visited[&dp - &(*path)[0]] && dp.dlugosc < minDistance) {
+                minDistance = dp.dlugosc;
+                current = &dp;
+            }
+        }
+
+        if (current == nullptr) break; // All reachable nodes have been visited
+
+        visited[current - &(*path)[0]] = true;
+
+        // Update distances for neighbors
+        for (const auto& conn_name : current->p.connections) {
+            dpoint* neighbor = finddPoint(conn_name.name, *path);
+            if (neighbor && !visited[neighbor - &(*path)[0]]) {
+                int new_distance = current->dlugosc + distance(current->p, neighbor->p);
+                if (new_distance < neighbor->dlugosc) {
+                    neighbor->dlugosc = new_distance;
+                    neighbor->prev = current->p.name;
+                }
             }
         }
     }
