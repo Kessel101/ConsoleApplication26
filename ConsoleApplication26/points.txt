@@ -1,0 +1,52 @@
+Name: A, Coordinates: (-41, 6), Connections: B C D E 
+Name: B, Coordinates: (-38, 6), Connections: A C D E F H 
+Name: C, Coordinates: (-40, 6), Connections: A B D E 
+Name: D, Coordinates: (-40, 8), Connections: A B C E 
+Name: E, Coordinates: (-36, 6), Connections: A B C D F G H I 
+Name: F, Coordinates: (-35, 10), Connections: B E G H 
+Name: G, Coordinates: (-33, 9), Connections: E F H I J L 
+Name: H, Coordinates: (-35, 7), Connections: B E F G I 
+Name: I, Coordinates: (-31, 6), Connections: E G H J K L M 
+Name: J, Coordinates: (-29, 6), Connections: G I K L M 
+Name: K, Coordinates: (-26, 6), Connections: I J L M N O 
+Name: L, Coordinates: (-30, 6), Connections: G I J K M 
+Name: M, Coordinates: (-28, 7), Connections: I J K L N O 
+Name: N, Coordinates: (-24, 8), Connections: K M O P Q 
+Name: O, Coordinates: (-23, 7), Connections: K M N P Q 
+Name: P, Coordinates: (-19, 8), Connections: N O Q R S T U 
+Name: Q, Coordinates: (-20, 10), Connections: N O P R S T U 
+Name: R, Coordinates: (-16, 11), Connections: P Q S T U W 
+Name: S, Coordinates: (-15, 10), Connections: P Q R T U W 
+Name: T, Coordinates: (-19, 13), Connections: P Q R S U V W 
+Name: U, Coordinates: (-18, 12), Connections: P Q R S T V W 
+Name: V, Coordinates: (-18, 16), Connections: T U W 
+Name: W, Coordinates: (-15, 15), Connections: R S T U V X
+Name: X, Coordinates: (-13, 17), Connections: W Y Z a b 
+Name: Y, Coordinates: (-10, 18), Connections: X Z a b d e f 
+Name: Z, Coordinates: (-10, 17), Connections: X Y a b e 
+Name: a, Coordinates: (-9, 17), Connections: X Y Z b d e 
+Name: b, Coordinates: (-8, 17), Connections: X Y Z a c d e f 
+Name: c, Coordinates: (-3, 17), Connections: b d 
+Name: d, Coordinates: (-5, 18), Connections: Y a b c e f i 
+Name: e, Coordinates: (-8, 21), Connections: Y Z a b d f h i j 
+Name: f, Coordinates: (-8, 22), Connections: Y b d e g h i j 
+Name: g, Coordinates: (-6, 26), Connections: f h i j 
+Name: h, Coordinates: (-7, 23), Connections: e f g i j 
+Name: i, Coordinates: (-4, 22), Connections: d e f g h j k 
+Name: j, Coordinates: (-4, 24), Connections: e f g h i k l 
+Name: k, Coordinates: (-1, 24), Connections: i j l 
+Name: l, Coordinates: (0, 27), Connections: j k m n o q 
+Name: m, Coordinates: (0, 30), Connections: l o q 
+Name: n, Coordinates: (5, 27), Connections: l q t 
+Name: o, Coordinates: (1, 31), Connections: l m p q r t 
+Name: p, Coordinates: (5, 33), Connections: o q r s t w 
+Name: q, Coordinates: (3, 31), Connections: l m n o p r s t 
+Name: r, Coordinates: (4, 34), Connections: o p q s t 
+Name: s, Coordinates: (7, 33), Connections: p q r t u w x v
+Name: t, Coordinates: (5, 31), Connections: n o p q r s u 
+Name: u, Coordinates: (10, 31), Connections: s t v w x y z 
+Name: v, Coordinates: (11, 33), Connections: s u w x y z 
+Name: w, Coordinates: (10, 33), Connections: p s u v x y z 
+Name: x, Coordinates: (11, 31), Connections: s u v w y z 
+Name: y, Coordinates: (14, 34), Connections: u v w x z 
+Name: z, Coordinates: (12, 34), Connections: u v w x y 
